@@ -4,22 +4,61 @@
       <div class="avatar_box">
         <img src="../assets/logo.png">
       </div>
-<!--      &lt;!&ndash;     element Ui&ndash;&gt;-->
-<!--      <el-form ref="form" :model="form" label-width="80px">-->
-<!--        <el-form-item label="活动名称">-->
-<!--          <el-input v-model="form.name"></el-input>-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
+      <!--     element Ui-->
+      <el-form ref="loginform" :model="form" :rules="rules" label-width="0px" class="login_form">
+        <el-form-item prop="checkname">
+          <el-input v-model="form.username" prefix-icon="iconfont icon-user"></el-input>
+        </el-form-item>
+        <el-form-item prop="checkPass">
+          <el-input v-model="form.password" type="password" prefix-icon="iconfont icon-3702mima"></el-input>
+        </el-form-item>
+        <el-form-item style="float: right">
+          <el-button type="primary" @click="qingqiulogin">确认</el-button>
+          <el-button type="primary" @click="resetloginform()">重置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'login'
+  name: 'login',
+  data () {
+    return {
+      form: {
+        username: 'admin',
+        password: '123456'
+      },
+      rules: {
+        checkname: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        checkPass: [
+          { required: true, trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    resetloginform () {
+      this.$refs.loginform.resetFields()
+    },
+    async qingqiulogin () {
+      const { data: res } = await this.$http.post('login', this.form)
+      if (res.meta.status !== 200) {
+        return this.$message.error('登录错误')
+      }
+      this.$message.success('登录成功')
+      window.sessionStorage.setItem('token', res.data.token)
+      // 导航至/home
+      this.$router.push('/home')
+    }
+  }
 }
-</script>
 
+</script>
 <style lang="less" scoped>
   .login_containner{
     padding-top: 1px;
@@ -46,5 +85,11 @@ export default {
       background-color: #ddd;
       border: white 5px solid;
     }
+  }
+
+  .login_form{
+    transform: translateY(100px);
+    box-sizing: border-box;
+    padding: 0 10px;
   }
 </style>
