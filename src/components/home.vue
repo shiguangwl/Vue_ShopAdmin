@@ -1,22 +1,12 @@
 <template>
-  <div>
-    <el-button @click="tuichu">退出</el-button>
-  </div>
+<div>
+  <h3>0200</h3>
+</div>
 </template>
 
 <script>
 export default {
-  name: 'home',
-  data () {
-    return {
-    }
-  },
-  methods: {
-    tuichu () {
-      window.sessionStorage.clear()
-      this.$router.push('/login')
-    }
-  }
+  name: 'home'
 }
 </script>
 
